@@ -7,30 +7,30 @@ form.addEventListener('submit', event => {
   event.preventDefault();
 
   const state = form.elements['state'].value;
-  const delay = form.elements['delay'].value;
-
-  const isSuccess = state;
+  const delay = Number(form.elements['delay'].value);
 
   const promise = new Promise((resolve, reject) => {
     setTimeout(() => {
-      if (isSuccess === 'fulfilled') {
-        resolve(
-          iziToast.success({
-            message: `Fulfilled promise in ${delay}ms`,
-            position: 'topRight',
-          })
-        );
+      if (state === 'fulfilled') {
+        resolve(`Fulfilled promise in ${delay}ms`);
       } else {
-        reject(
-          iziToast.error({
-            message: `Rejected promise in ${delay}ms`,
-            position: 'topRight',
-          })
-        );
+        reject(`Rejected promise in ${delay}ms`);
       }
     }, delay);
   });
 
-  console.log(promise);
+  promise
+    .then(message => {
+      iziToast.success({
+        message,
+        position: 'topRight',
+      });
+    })
 
+    .catch(message => {
+      iziToast.error({
+        message,
+        position: 'topRight',
+      });
+    });
 });
